@@ -1,5 +1,6 @@
 require "rigor/version"
-require "rigor/rails" if defined?(Rails::Railtie)
+require "rigor/treatment"
+require "rigor/test"
 
-module Rigor
-end
+# Frameworks
+require "rigor/rails" if defined?(Rails::Railtie)
