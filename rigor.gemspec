@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = ''
   s.license     = 'MIT'
 
-  s.required_ruby_version     = '>= 1.9.2'
+  s.required_ruby_version = '>= 1.9.2'
 
   s.author      = 'Paul Rosania'
   s.email       = 'paul.rosania@gmail.com'
@@ -18,4 +18,7 @@ Gem::Specification.new do |s|
 
   s.files        = Dir['CHANGELOG.md', 'README.rdoc', 'MIT-LICENSE', 'lib/**/*']
   s.require_path = 'lib'
+
+  s.add_runtime_dependency('rack',  '>= 1.1')
+  s.add_runtime_dependency('redis', '>= 2.2')
 end
