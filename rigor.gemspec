@@ -1,7 +1,10 @@
+# -*- encoding: utf-8 -*-
+require File.expand_path('../lib/rigor/version', __FILE__)
+
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'rigor'
-  s.version     = '0.0.1'
+  s.version     = Rigor::VERSION
   s.date        = '2012-02-11'
   s.summary     = 'A rigorous A/B testing framework.'
   s.description = ''
