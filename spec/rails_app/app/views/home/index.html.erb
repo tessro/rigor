@@ -1,1 +1,9 @@
 <h1>Hello.</h1>
+<%- if treatment("Funny subtitle") == :test %>
+  Welcome to the funny test app.
+<%- else %>
+  Welcome to the test app.
+<%- end %>
+<%= treatment("Funny subtitle") do |treatment| %>
+  Welcome to the <%= treatment %> app.
+<%- end %>
