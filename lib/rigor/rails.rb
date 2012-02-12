@@ -15,7 +15,7 @@ module Rigor
         treatment = test.random_treatment
 
         if block_given?
-          capture(treatment, &block)
+          capture(treatment.name, &block)
         else
           treatment
         end
