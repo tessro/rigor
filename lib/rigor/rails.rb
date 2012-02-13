@@ -12,15 +12,23 @@ module Rigor
       end
     end
 
+    def cookies
+      super.cookies[:_rigor_treatments] ||= {}
+    end
+
     module Helpers
       def treatment(experiment_name, &block)
-        test = Rigor::Experiment.find_by_name(experiment_name)
-        treatment = test.random_treatment
+        treatment_name = if cookies[experiment_name]
+                           cookies[experiment_name]
+                         else
+                           test = Rigor::Experiment.find_by_name(experiment_name)
+                           cookies[experiment_name] = test.random_treatment.name
+                         end.to_s
 
         if block_given?
-          capture(treatment.name, &block)
+          capture(treatment_name, &block)
         else
-          treatment.name
+          treatment_name
         end
       end
     end
