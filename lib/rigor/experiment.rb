@@ -2,6 +2,7 @@ module Rigor
   class Experiment
     def self.load_from(filename)
       instance_eval(File.read(filename)).tap do |e|
+        e.id = Pathname.new(filename).basename.to_s.to_i
         @experiments ||= {}
         @experiments[e.name] = e
       end
@@ -26,12 +27,16 @@ module Rigor
       @treatments = []
     end
 
-    attr_accessor :description
+    attr_accessor :id
     attr_accessor :name
+    attr_accessor :description
     attr_reader :treatments
 
     def add_treatment(treatment)
+      treatment.experiment = self
+      treatment.index = @treatments.length
       @treatments << treatment
+      treatment
     end
 
     def random_treatment

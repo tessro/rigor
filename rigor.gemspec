@@ -19,8 +19,9 @@ Gem::Specification.new do |s|
   s.files        = Dir['CHANGELOG.md', 'README.rdoc', 'MIT-LICENSE', 'lib/**/*']
   s.require_path = 'lib'
 
-  s.add_runtime_dependency('rack',  '>= 1.1')
-  s.add_runtime_dependency('redis', '>= 2.2')
+  s.add_runtime_dependency('rack',            '>= 1.1')
+  s.add_runtime_dependency('redis',           '>= 2.2')
+  s.add_runtime_dependency('redis-namespace', '>= 1.1')
 
   s.add_development_dependency('rails',   '>= 3.2')
   s.add_development_dependency('sqlite3', '>= 0')

@@ -22,7 +22,9 @@ module Rigor
                            cookies[experiment_name]
                          else
                            test = Rigor::Experiment.find_by_name(experiment_name)
-                           cookies[experiment_name] = test.random_treatment.name
+                           treatment = test.random_treatment
+                           treatment.record!
+                           cookies[experiment_name] = treatment.name
                          end.to_s
 
         if block_given?
