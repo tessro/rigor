@@ -7,17 +7,20 @@ module Rigor
 
   module Rails
     def self.load!
+      Dir[::Rails.root.join('experiments', '*.rb')].each do |file|
+        Rigor::Experiment.load_from(file)
+      end
     end
 
     module Helpers
-      def treatment(test_name, &block)
-        test = Rigor::Test.find_by_name(test_name)
+      def treatment(experiment_name, &block)
+        test = Rigor::Experiment.find_by_name(experiment_name)
         treatment = test.random_treatment
 
         if block_given?
           capture(treatment.name, &block)
         else
-          treatment
+          treatment.name
         end
       end
     end
