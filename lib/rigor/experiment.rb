@@ -1,5 +1,5 @@
 module Rigor
-  class Test
+  class Experiment
     def self.find_by_name(name)
       Test.new
     end
