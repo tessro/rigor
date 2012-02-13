@@ -9,10 +9,8 @@ module Rigor::Adapters
       redis.hincrby("experiments:#{experiment.id}", "treatments:#{treatment.index}", 1)
     end
 
-    def record_event!(event, treatments)
-      treatments.each do |treatment|
-        redis.hincrby("experiments:#{treatment.experiment.id}", "events:#{event}", 1)
-      end
+    def record_event!(treatment, event)
+      redis.hincrby("experiments:#{treatment.experiment.id}", "treatments:#{treatment.index}:events:#{event}", 1)
     end
 
     protected

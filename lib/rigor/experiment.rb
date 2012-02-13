@@ -4,7 +4,7 @@ module Rigor
       instance_eval(File.read(filename)).tap do |e|
         e.id = Pathname.new(filename).basename.to_s.to_i
         @experiments ||= {}
-        @experiments[e.name] = e
+        @experiments[e.id] = e
       end
     end
 
@@ -16,6 +16,10 @@ module Rigor
 
     def self.all
       @experiments
+    end
+
+    def self.find_by_id(id)
+      all[id.to_i]
     end
 
     def self.find_by_name(name)
