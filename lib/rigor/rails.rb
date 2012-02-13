@@ -18,19 +18,20 @@ module Rigor
 
     module Helpers
       def treatment(experiment_name, &block)
-        treatment_name = if cookies[experiment_name]
-                           cookies[experiment_name]
-                         else
-                           test = Rigor::Experiment.find_by_name(experiment_name)
-                           treatment = test.random_treatment
-                           treatment.record!
-                           cookies[experiment_name] = treatment.name
-                         end.to_s
+        experiment = Rigor::Experiment.find_by_name(experiment_name)
+        treatment  = if cookies[experiment.id]
+                       experiment.treatments[cookies[experiment.id]]
+                     else
+                       experiment.random_treatment.tap do |treatment|
+                         treatment.record!
+                         cookies[experiment.id] = treatment.index
+                       end
+                     end
 
         if block_given?
-          capture(treatment_name, &block)
+          capture(treatment.name, &block)
         else
-          treatment_name
+          treatment.name
         end
       end
     end
