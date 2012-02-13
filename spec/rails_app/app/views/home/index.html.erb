@@ -1,9 +1,15 @@
 <h1>Hello.</h1>
-<%- if treatment("sample") == :test %>
-  Welcome to the funny test app.
+
+<p>
+  Your treatment is <strong><%= treatment("sample") %></strong>.
+</p>
+
+<%- if treatment("sample") == "test" %>
+  Welcome to the test variant.
 <%- else %>
-  Welcome to the test app.
+  Welcome to the control variant.
 <%- end %>
+
 <%= treatment("sample") do |treatment| %>
-  Welcome to the <%= treatment %> app.
+  (In this block, it's the <%= treatment %> variant.)
 <%- end %>
