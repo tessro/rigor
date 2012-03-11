@@ -22,16 +22,13 @@ module Rigor
         Rigor::Rails::CookieJar.new(cookies)
       end
 
-      def treatment(experiment_name, &block)
-        experiment = Rigor::Experiment.find_by_name(experiment_name)
-        treatment  = if treatment_cookies[experiment.id]
-                       experiment.treatments[treatment_cookies[experiment.id].to_i]
-                     else
-                       experiment.random_treatment.tap do |treatment|
-                         treatment.record!
-                         treatment_cookies[experiment.id] = treatment.index
-                       end
-                     end
+      def experiment(experiment_name)
+        Rigor::Experiment.find_by_name(experiment_name)
+      end
+
+      def current_treatment(experiment_name, &block)
+        session = Struct.new("Session", :id).new(request.session_options[:id])
+        treatment = experiment(experiment_name).treatment_for(session)
 
         if block_given?
           capture(treatment.name, &block)

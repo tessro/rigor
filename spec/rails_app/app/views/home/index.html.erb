@@ -1,16 +1,16 @@
 <h1>Hello.</h1>
 
 <p>
-  Your treatment is <strong><%= treatment("sample") %></strong>.
+  Your treatment is <strong><%= current_treatment("sample") %></strong>.
 </p>
 
-<%- if treatment("sample") == :test %>
+<%- if current_treatment("sample") == :test %>
   Welcome to the test variant.
 <%- else %>
   Welcome to the control variant.
 <%- end %>
 
-<%= treatment("sample") do |treatment| %>
+<%= current_treatment("sample") do |treatment| %>
   (In this block, it's the <%= treatment %> variant.)
 <%- end %>
 <%= record!(:visit) %>

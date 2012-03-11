@@ -13,8 +13,8 @@ module Rigor
     attr_reader :weight
     attr_reader :attributes
 
-    def record!
-      Rigor.connection.record_treatment!(experiment, self)
+    def record!(object)
+      Rigor.connection.record_treatment!(experiment, self, object)
     end
 
     def record_event!(event)

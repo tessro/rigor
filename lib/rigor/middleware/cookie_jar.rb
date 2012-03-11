@@ -1,5 +1,5 @@
 module Rigor
-  class Middleware
+  module Rails
     class CookieJar
       def initialize(cookies)
         @cookies = cookies
@@ -19,14 +19,6 @@ module Rigor
 
       def delete(experiment_id)
         cookies.delete("_rigor_experiment_#{experiment_id}")
-      end
-
-      def treatments
-        reduce({}) do |hash, (cookie_name, treatment_idx)|
-          experiment_id = cookie_name.match(/_rigor_experiment_([0-9]+)/)[1]
-          hash[experiment_id] = treatment_idx
-          hash
-        end
       end
 
       protected

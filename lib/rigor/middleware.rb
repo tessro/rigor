@@ -1,3 +1,5 @@
+require 'rigor/middleware/cookie_jar'
+
 module Rigor
   class Middleware
     def initialize(app, options={})
@@ -8,7 +10,7 @@ module Rigor
 
     def call(env)
       request = ::Rack::Request.new(env)
-      cookies = treatment_cookies(request)
+      cookies = Rigor::Middleware::CookieJar.new(request.cookies)
       process_treatment_cookies(cookies)
       status, headers, body = app.call(env)
       response = ::Rack::Response.new(body, status, headers)
@@ -17,10 +19,6 @@ module Rigor
     end
 
     protected
-
-    def treatment_cookies(request)
-      request.cookies.select { |k,v| k =~ /^_rigor_experiment_/ }
-    end
 
     def process_treatment_cookies(cookies)
       Experiment.assign_all(cookies)
