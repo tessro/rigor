@@ -1,5 +1,10 @@
+require 'rigor/middleware'
+require 'rigor/rails/cookie_jar'
+
 module Rigor
   class Railtie < ::Rails::Railtie
+    config.app_middleware.use ::Rigor::Middleware
+
     initializer "rigor.load" do
       Rigor::Rails.load!
     end
@@ -12,19 +17,19 @@ module Rigor
       end
     end
 
-    def cookies
-      super.cookies[:_rigor_treatments] ||= {}
-    end
-
     module Helpers
+      def treatment_cookies
+        Rigor::Rails::CookieJar.new(cookies)
+      end
+
       def treatment(experiment_name, &block)
         experiment = Rigor::Experiment.find_by_name(experiment_name)
-        treatment  = if cookies[experiment.id]
-                       experiment.treatments[cookies[experiment.id].to_i]
+        treatment  = if treatment_cookies[experiment.id]
+                       experiment.treatments[treatment_cookies[experiment.id].to_i]
                      else
                        experiment.random_treatment.tap do |treatment|
                          treatment.record!
-                         cookies[experiment.id] = treatment.index
+                         treatment_cookies[experiment.id] = treatment.index
                        end
                      end
 
@@ -36,7 +41,7 @@ module Rigor
       end
 
       def record!(event)
-        cookies.each do |experiment_id, treatment_idx|
+        treatment_cookies.each do |experiment_id, treatment_idx|
           experiment = Rigor::Experiment.find_by_id(experiment_id)
           if experiment
             treatment = experiment.treatments[treatment_idx.to_i]

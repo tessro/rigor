@@ -26,6 +26,9 @@ module Rigor
       all.values.find { |e| e.name == name }
     end
 
+    def self.assign_all(hash)
+    end
+
     def initialize(name)
       @name = name
       @treatments = []
