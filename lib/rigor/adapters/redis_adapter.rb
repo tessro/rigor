@@ -10,7 +10,7 @@ module Rigor::Adapters
     end
 
     def record_event!(treatment, event)
-      redis.hincrby("experiments:#{treatment.experiment.id}", "treatments:#{treatment.index}:events:#{event}", 1)
+      redis.hincrby("experiments:#{treatment.experiment.id}:treatments:#{treatment.index}:events", event, 1)
     end
 
     def find_existing_treatment(experiment, object)
