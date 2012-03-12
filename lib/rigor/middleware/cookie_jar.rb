@@ -1,5 +1,5 @@
 module Rigor
-  module Rails
+  class Middleware
     class CookieJar
       def initialize(cookies)
         @cookies = cookies
