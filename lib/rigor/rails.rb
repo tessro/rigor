@@ -22,8 +22,9 @@ module Rigor
       end
 
       def current_treatment(experiment_name, &block)
-        session = Rigor::Rails::Session.new(request)
-        treatment = experiment(experiment_name).treatment_for(session)
+        experiment = experiment(experiment_name)
+        identity   = current_identity_for(experiment)
+        treatment  = experiment.treatment_for(identity)
 
         if block_given?
           capture(treatment.name, &block)
@@ -33,14 +34,19 @@ module Rigor
       end
 
       def record!(event)
-        session = Rigor::Rails::Session.new(request)
-
-        Experiment.all.each do |experiment|
-          treatment = experiment.treatment_for(session)
+        Experiment.all.each do |name, experiment|
+          identity  = current_identity_for(experiment)
+          treatment = experiment.treatment_for(identity)
           treatment.record_event!(event)
         end
 
         nil
+      end
+
+      protected
+
+      def current_identity_for(experiment)
+        send(experiment.identity_method) || Rigor::Rails::Session.new(request)
       end
     end
   end

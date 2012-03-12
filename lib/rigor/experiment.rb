@@ -37,6 +37,7 @@ module Rigor
     attr_accessor :id
     attr_accessor :name
     attr_accessor :description
+    attr_accessor :identity_method
     attr_reader :treatments
 
     def add_treatment(treatment)
@@ -70,6 +71,10 @@ module Rigor
     class DSL
       def initialize(experiment)
         @experiment = experiment
+      end
+
+      def identity(method)
+        @experiment.identity_method = method
       end
 
       def description(description)
