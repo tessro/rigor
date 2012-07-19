@@ -24,8 +24,7 @@ module Rigor
 
       def current_treatment(experiment_name, &block)
         experiment = experiment(experiment_name)
-        identity   = current_identity_for(experiment)
-        treatment  = experiment.treatment_for(identity)
+        treatment  = Rigor.subject.treatment_for(experiment)
 
         if block_given?
           capture(treatment.name, &block)
@@ -37,17 +36,11 @@ module Rigor
       def record!(event)
         Experiment.all.each do |name, experiment|
           identity  = current_identity_for(experiment)
-          treatment = experiment.treatment_for(identity)
+          treatment = Rigor.subject.treatment_for(experiment)
           treatment.record_event!(event)
         end
 
         nil
-      end
-
-      protected
-
-      def current_identity_for(experiment)
-        send(experiment.identity_method) || Rigor::Rails::Session.new(request)
       end
     end
   end

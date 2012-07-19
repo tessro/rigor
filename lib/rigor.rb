@@ -10,4 +10,11 @@ module Rigor
   def self.connection
     @connection ||= Rigor::Adapters::RedisAdapter.new("rigor")
   end
+
+  # The test subject
+  cattr_accessor :subject
+
+  def self.identify_subject(object)
+    Rigor.subject.become(object) || (Rigor.subject = Rigor::Subject.new(object))
+  end
 end
