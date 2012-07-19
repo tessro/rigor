@@ -1,4 +1,5 @@
 require 'rigor/middleware/cookie_jar'
+require 'rigor/middleware/session'
 
 module Rigor
   class Middleware
@@ -11,7 +12,8 @@ module Rigor
     def call(env)
       request = ::Rack::Request.new(env)
       cookies = Rigor::Middleware::CookieJar.new(request.cookies)
-      session = Rigor::Session.new(env['rigor.session'])
+      session_id = request.cookies['rigor.session_id'] || Digest::SHA256.hexdigest(rand.to_s)
+      session = Rigor::Middleware::Session.new(session_id)
       session.load_treatment_cookies(cookies)
       subject = Rigor::Subject.new(session)
 
@@ -20,6 +22,7 @@ module Rigor
       subject.save
 
       response = ::Rack::Response.new(body, status, headers)
+      response.set_cookie('rigor.session_id', value: session_id, path: '/', expires: 1.year.from_now)
       delete_treatment_cookies(response, cookies)
 
       response.finish

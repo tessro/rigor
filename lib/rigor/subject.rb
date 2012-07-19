@@ -34,10 +34,8 @@ module Rigor
       process_treatment_cookies(options.delete(:treatment_cookies)) if options[:treatment_cookies]
     end
 
-    attr_reader :id
-
     def treatment_for(experiment)
-      experiment.treatment_for(self)
+      experiment.treatment_for(@object)
     end
 
     def become(object)
@@ -45,7 +43,7 @@ module Rigor
     end
 
     def save
-      save_treatments
+      # save_treatments
     end
   end
 end

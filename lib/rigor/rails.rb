@@ -35,7 +35,6 @@ module Rigor
 
       def record!(event)
         Experiment.all.each do |name, experiment|
-          identity  = current_identity_for(experiment)
           treatment = Rigor.subject.treatment_for(experiment)
           treatment.record_event!(event)
         end

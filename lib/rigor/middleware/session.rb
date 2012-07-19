@@ -1,10 +1,12 @@
 module Rigor
   class Middleware
     class Session
-      def initialize(session)
-        @session = session
+      def initialize(session_id)
+        @session_id = session_id
+      end
 
-        process_treatment_cookies
+      def id
+        @session_id
       end
 
       def load_treatment_cookies(cookies)
