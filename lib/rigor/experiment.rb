@@ -26,7 +26,10 @@ module Rigor
       all.values.find { |e| e.name == name }
     end
 
-    def self.assign_all(hash)
+    def self.assign_all_from_hash(hash)
+      hash.each do |experiment_id, treatment_idx|
+        experiment = Experiment.find_by_id(experiment_id)
+      end
     end
 
     def initialize(name)
