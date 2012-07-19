@@ -2,6 +2,7 @@ require 'rigor/middleware'
 
 module Rigor
   class Railtie < ::Rails::Railtie
+    config.app_middleware.use Rack::Session::Cookie, :key => 'rigor.session'
     config.app_middleware.use ::Rigor::Middleware
 
     initializer "rigor.load" do
