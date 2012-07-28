@@ -4,6 +4,8 @@ A rigorous A/B testing framework.
 
 <b>Note: Rigor is prerelease code. The API is subject to change. You have been warned!</b>
 
+<b>Seriously, this is a spike. Don't use it! :)</b>
+
 == Installation
 
 Add this line to your application's Gemfile:
