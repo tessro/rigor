@@ -6,16 +6,27 @@
 module Rigor
   class Subject
     def initialize(object, prior = nil)
+      @treatments = {}
       @object = object
       import_treatments_from(prior) if prior
     end
 
+    attr_reader :treatments
+
     def treatment_for(experiment)
-      experiment.treatment_for(@object)
+      @treatments[experiment.id] ||=
+        Rigor.connection.find_existing_treatment(experiment, @object) ||
+        experiment.random_treatment
+    end
+
+    def import_treatments_from(other)
+      @treatments = treatments.merge(other.treatments)
     end
 
     def save
-      # save_treatments
+      treatments.each do |_, treatment|
+        treatment.record!(@object)
+      end
     end
   end
 end

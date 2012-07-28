@@ -59,12 +59,6 @@ module Rigor
       end
     end
 
-    def treatment_for(subject)
-      Rigor.connection.find_existing_treatment(self, subject) || random_treatment.tap do |treatment|
-        treatment.record!(subject)
-      end
-    end
-
     protected
 
     def cumulative_weights
