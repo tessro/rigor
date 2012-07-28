@@ -17,7 +17,7 @@ module Rigor
     attr_accessor :subject
 
     def identify_subject(object)
-      Rigor.subject ? Rigor.subject.become(object) : (Rigor.subject = Rigor::Subject.new(object))
+      Rigor.subject = Rigor::Subject.new(object, Rigor.subject)
     end
   end
 end
