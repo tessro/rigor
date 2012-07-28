@@ -15,11 +15,11 @@ module Rigor
       session_id = request.cookies['rigor.session_id'] || Digest::SHA256.hexdigest(rand.to_s)
       session = Rigor::Middleware::Session.new(session_id)
       session.load_treatment_cookies(cookies)
-      subject = Rigor::Subject.new(session)
+      Rigor.subject = Rigor::Subject.new(session)
 
       status, headers, body = app.call(env)
 
-      subject.save
+      Rigor.subject.save
 
       response = ::Rack::Response.new(body, status, headers)
       response.set_cookie('rigor.session_id', value: session_id, path: '/', expires: 1.year.from_now)
