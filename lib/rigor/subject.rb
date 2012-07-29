@@ -13,10 +13,10 @@ module Rigor
 
     attr_reader :treatments
 
-    def treatment_for(experiment)
-      @treatments[experiment.id] ||=
-        Rigor.connection.find_existing_treatment(experiment, @object) ||
-        experiment.random_treatment
+    def treatment_for(experiment, options = {})
+      @treatments[experiment.id] ||= Rigor.connection.find_existing_treatment(experiment, @object)
+      @treatments[experiment.id] ||= experiment.random_treatment unless options[:only] == :existing
+      @treatments[experiment.id]
     end
 
     def import_treatments_from(other)
