@@ -17,8 +17,8 @@ module Rigor
       Rigor.connection.record_treatment!(experiment, self, object)
     end
 
-    def record_event!(event)
-      Rigor.connection.record_event!(self, event)
+    def record_event!(event, object)
+      Rigor.connection.record_event!(self, object, event)
     end
   end
 end

@@ -34,11 +34,7 @@ module Rigor
       end
 
       def record!(event)
-        Experiment.all.each do |name, experiment|
-          treatment = Rigor.subject.treatment_for(experiment, :only => :existing)
-          treatment.record_event!(event)
-        end
-
+        Rigor.subject.record_event(event)
         nil
       end
     end

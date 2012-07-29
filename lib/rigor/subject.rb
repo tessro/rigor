@@ -19,6 +19,13 @@ module Rigor
       @treatments[experiment.id]
     end
 
+    def record_event(event)
+      Experiment.all.each do |_, experiment|
+        treatment = treatment_for(experiment, :only => :existing)
+        treatment.record_event!(event, @object)
+      end
+    end
+
     def import_treatments_from(other)
       @treatments = treatments.merge(other.treatments)
     end
