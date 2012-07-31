@@ -13,6 +13,22 @@ module Rigor
     attr_reader :weight
     attr_reader :attributes
 
+    def size
+      Rigor.connection.treatment_size(self)
+    end
+
+    def total_events(event)
+      Rigor.connection.total_events(self, event)
+    end
+
+    def unique_events(event)
+      Rigor.connection.unique_events(self, event)
+    end
+
+    def event_distribution(event)
+      Rigor.connection.event_distribution(self, event)
+    end
+
     def record!(object)
       Rigor.connection.record_treatment!(experiment, self, object)
     end
