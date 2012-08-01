@@ -32,13 +32,13 @@ module Rigor::Adapters
     def total_events(treatment, event)
       experiment = treatment.experiment
       result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
-      result.reduce(&:+)
+      result.map(&:to_i).reduce(&:+)
     end
 
     def event_distribution(treatment, event)
       experiment = treatment.experiment
       result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
-      result.reduce([]) do |arr, ct|
+      result.map(&:to_i).reduce([]) do |arr, ct|
         arr[ct] ||= 0
         arr[ct]  += 1
         arr.map { |i| i || 0 }
