@@ -15,33 +15,33 @@ module Rigor::Adapters
     end
 
     def record_treatment!(experiment, treatment, object)
-      redis.sadd("experiments:#{experiment.id}:treatments:#{treatment.index}:subjects", generate_identifier(object))
+      redis.sadd(subjects_key(experiment, treatment), generate_identifier(object))
     end
 
     def record_event!(treatment, object, event)
-      redis.hincrby("experiments:#{treatment.experiment.id}:treatments:#{treatment.index}:events:#{event}", generate_identifier(object), 1)
+      redis.hincrby(event_key(treatment.experiment, treatment, event), generate_identifier(object), 1)
     end
 
     def find_existing_treatment(experiment, object)
       experiment.treatments.find do |treatment|
-        redis.sismember("experiments:#{experiment.id}:treatments:#{treatment.index}:subjects", generate_identifier(object))
+        redis.sismember(subjects_key(experiment, treatment), generate_identifier(object))
       end
     end
 
     def treatment_size(treatment)
       experiment = treatment.experiment
-      redis.scard("experiments:#{experiment.id}:treatments:#{treatment.index}:subjects")
+      redis.scard(subjects_key(experiment, treatment))
     end
 
     def unique_events(treatment, event)
       experiment = treatment.experiment
-      redis.hlen("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
+      redis.hlen(event_key(experiment, treatment, event))
     end
 
     # FIXME: Track total events separately to improve from O(N) to O(1).
     def total_events(treatment, event)
       experiment = treatment.experiment
-      result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
+      result = redis.hvals(event_key(experiment, treatment, event))
       result.map(&:to_i).reduce(&:+)
     end
 
@@ -65,6 +65,14 @@ module Rigor::Adapters
     end
 
     protected
+
+    def subjects_key(experiment, treatment)
+      "experiments:#{experiment.id}:treatments:#{treatment.index}:subjects"
+    end
+
+    def event_key(experiment, treatment, event)
+      "experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}"
+    end
 
     def generate_identifier(object)
       "#{object.class.name}:#{object.id}"
