@@ -38,12 +38,20 @@ module Rigor::Adapters
       redis.hlen("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
     end
 
+    # FIXME: Track total events separately to improve from O(N) to O(1).
     def total_events(treatment, event)
       experiment = treatment.experiment
       result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
       result.map(&:to_i).reduce(&:+)
     end
 
+    # FIXME: this is linear on the number of subjects; could fix by tracking the
+    # distribution separately, and using the events hash to figure out how to
+    # alter the distribution in the face of new events (get old count, increment
+    # the user's count, decrement distribution at old count, increment at new)
+    # this fix would make this method linear on the cardinality of the
+    # distribution, rather than the number of subjects, which is probably the
+    # smaller value in most cases.
     def event_distribution(treatment, event)
       experiment = treatment.experiment
       result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
