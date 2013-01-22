@@ -38,11 +38,13 @@ module Rigor::Adapters
     def event_distribution(treatment, event)
       experiment = treatment.experiment
       result = redis.hvals("experiments:#{experiment.id}:treatments:#{treatment.index}:events:#{event}")
-      result.map(&:to_i).reduce([]) do |arr, ct|
+      distribution = result.map(&:to_i).reduce([]) do |arr, ct|
         arr[ct] ||= 0
         arr[ct]  += 1
         arr.map { |i| i || 0 }
       end
+      distribution[0] = treatment_size(treatment) - unique_events(treatment, event)
+      distribution
     end
 
     protected
