@@ -1,5 +1,14 @@
 module Rigor::Adapters
   class RedisAdapter
+    # Data model:
+    #
+    # Key: experiments:<experiment_id>:treatments:<treatment_id>:subjects
+    # Type: set
+    # Values: subject identifier
+    #
+    # Key: experiments:<experiment_id>:treatments:<treatment_id>:events:<event_name>
+    # Type: hash
+    # Values: subject_identifier => count
     def initialize(namespace)
       require 'redis-namespace'
       @redis = Redis::Namespace.new(namespace, :redis => Redis.new)
