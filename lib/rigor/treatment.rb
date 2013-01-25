@@ -43,6 +43,10 @@ module Rigor
       dist.each_with_index.reduce(0.0) { |sse, d| sse + d[0] * (d[1] - m) ** 2 } / size
     end
 
+    def stddev(event)
+      Math.sqrt(variance(event))
+    end
+
     def mean(event)
       total_events(event).to_f / size
     end
