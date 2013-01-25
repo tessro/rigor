@@ -55,6 +55,14 @@ module Rigor
       unique_events(event).to_f / size
     end
 
+    def significant?(event, control, cutoff = 1.96)
+      z_value(event, control).abs > cutoff
+    end
+
+    def unique_significant?(event, control, cutoff = 1.96)
+      unique_z_value(event, control).abs > cutoff
+    end
+
     def z_value(event, control)
       se_diff = Math.sqrt(variance(event) / size + control.variance(event) / control.size)
       (mean(event) - control.mean(event)) / se_diff
