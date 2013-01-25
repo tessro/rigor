@@ -59,6 +59,10 @@ module Rigor
       end
     end
 
+    def control
+      treatments.first
+    end
+
     protected
 
     def cumulative_weights
